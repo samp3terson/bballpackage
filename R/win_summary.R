@@ -7,22 +7,17 @@
 #'@return This returns the data you will use to make the other graphs
 #'
 win_summary <- function(team, data) {
-  sumstats <- data %>% 
-    filter(`Home Team` == team | `Away Team` == team) %>% 
-    mutate(
-      result = case_when(
-        `Home Team` == team & `Home Score` > `Away Score` ~ "Win",
-        `Away Team` == team & `Away Score` > `Home Score` ~ "Win",
-        TRUE ~ "Loss"
-      )) %>% 
+  sumstats <- data %>%
+    filter(Team == team) %>%
     summarize(
       Team = team,
-      Total_Games = n(),
-      Wins = sum(result == "Win"),
-      Losses = sum(result == "Loss"),
-      Win_Percentage = mean(result == "Win", na.rm = TRUE),
+      Total_Games = first(Total_Games),
+      Wins = first(Wins),
+      Losses = first(Losses),
+      Win_Percentage = first(Win_Percentage),
       Date = first(Date),
-      Score_Diff = first(`Score Difference`)
+      Score_Diff = first(Score_Diff)
     )
   return(sumstats)
+}
 }
